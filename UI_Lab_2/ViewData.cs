@@ -4,18 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using ClassLibrary;
+
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Forms.DataVisualization.Charting;
 
-namespace UI_Lab_2
+namespace Wpf_Lab2_v3
 {
     public class ViewData
     {
+        public SplinesData sData { get; set; }
         public Chart chart { get; set; }
         public ChartData chartData { get; set; }
-        public SplinesData sData { get; set; }
         public ViewData()
         {
             MeasuredData md = new MeasuredData();

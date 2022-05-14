@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 using System.Globalization;
 
 
-namespace UI_Lab_2
+namespace Wpf_Lab2_v3
 {
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
@@ -31,26 +31,35 @@ namespace UI_Lab_2
             data = new ViewData();
             winFormsHost.Child = data.chart;
 
-            this.mdParam.DataContext = data.sData.md;
-            this.spParam.DataContext = data.sData.sp;
-            this.mdList.ItemsSource = data.sData.md.viewXY;
-            this.spDeriv1List.ItemsSource = data.sData.viewDerivSpline1;
-            this.spDeriv2List.ItemsSource = data.sData.viewDerivSpline2;
+            this.mdList.ItemsSource = data.sData.MData.XYinfo;
+            this.spDeriv1List.ItemsSource = data.sData.Spline1Info;
+            this.spDeriv2List.ItemsSource = data.sData.Spline2Info;
 
-            this.DataContext = data;
+            this.Function.DataContext = data.sData.MData;
+            this.Breakpoints.DataContext = data.sData.MData;
+            this.Start.DataContext = data.sData.MData;
+            this.End.DataContext = data.sData.MData;
+
+            this.Points.DataContext = data.sData.Parameters;
+            this.DStart1.DataContext = data.sData.Parameters;
+            this.DStart2.DataContext = data.sData.Parameters;
+            this.DEnd1.DataContext = data.sData.Parameters;
+            this.DEnd2.DataContext = data.sData.Parameters;
+
         }
-        private void button_calc_Click(object sender, RoutedEventArgs e)
+
+        private void Breakpoints_Button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                data.sData.md.calc_grid();
+                data.sData.MData.calc_grid();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
             }
         }
-        private void button_draw_Click(object sender, RoutedEventArgs e)
+        private void Draw_Button_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -60,34 +69,6 @@ namespace UI_Lab_2
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
-            }
-        }
-    }
-    [ValueConversion(typeof(Double[]), typeof(String))]
-    public class StringToDoubleSConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            double[] val = (double[])value;
-            return $"{val[0]};{val[1]}";
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            try
-            {
-                string[] words = ((string)value).Split(';');
-                if (words.Length != 2)
-                    return new double[2] { 0.0, 0.0 };
-                double[] values = new double[2];
-                values[0] = double.Parse(words[0]);
-                values[1] = double.Parse(words[1]);
-                return values;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-                return DependencyProperty.UnsetValue;
             }
         }
     }

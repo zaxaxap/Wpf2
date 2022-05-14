@@ -6,52 +6,70 @@ using System.Threading.Tasks;
 
 using System.ComponentModel;
 
-namespace ClassLibrary
-{
+namespace Wpf_Lab2_v3 
+{ 
     public class SplineParameters : INotifyPropertyChanged, IDataErrorInfo
     {
+        private double[] __Right_Left_1;
+        public double[] Right_Left_1 
+        {
+            get { return __Right_Left_1; }
+            set 
+            {
+                __Right_Left_1 = value;
+                OnPropertyChanged("Right_Left_1");
+            }
+        }
+        private double[] __Right_Left_2;
+        public double[] Right_Left_2
+        {
+            get { return __Right_Left_2; }
+            set
+            {
+                __Right_Left_2 = value;
+                OnPropertyChanged("Right_Left_2");
+            }
+        }
+
+        private int __nodes;
+        public int nodes
+        {
+            get
+            { return __nodes; }
+            set
+            {
+                __nodes = value;
+                OnPropertyChanged("nodes");
+            }
+        }
+
+        public SplineParameters(int nodes = 100, double Left_1 = 1.0, double Right_1 = 1.0, double Left_2 = -5.0, double Right_2 = 10.0)
+        {
+            this.nodes = nodes;
+            Right_Left_1 = new double[2] { Left_1, Right_1 };
+            Right_Left_2 = new double[2] { Left_2, Right_2 };
+        }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string property_name)
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(property_name));
         }
-        private int __cnt_nodes;
-        public int cnt_nodes
-        {
-            get
-            {
-                return __cnt_nodes;
-            }
-            set
-            {
-                __cnt_nodes = value;
-                OnPropertyChanged("cnt_nodes");
-            }
-        }
-        public double[] derivatives_spline1 { get; set; }
-        public double[] derivatives_spline2 { get; set; }
-        public SplineParameters(int cnt_nodes_ = 100, double l1 = 1.0, double r1 = 1.0, double l2 = -10.0, double r2 = 20.0)
-        {
-            cnt_nodes = cnt_nodes_;
-            derivatives_spline1 = new double[2] { l1, r1 };
-            derivatives_spline2 = new double[2] { l2, r2 };
-        }
         public string Error { get { return "Error"; } }
         public string this[string property]
         {
             get
             {
-                string msg = null;
+                string messange = null;
                 switch (property)
                 {
-                    case "cnt_nodes":
-                        if (cnt_nodes < 2) msg = "Number of breakpoints must be more 1!";
+                    case "nodes":
+                        if (nodes < 2) messange = "Number of points must be more 1!";
                         break;
                     default:
                         break;
                 }
-                return msg;
+                return messange;
             }
         }
     }
