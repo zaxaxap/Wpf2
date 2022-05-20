@@ -24,9 +24,14 @@ namespace Wpf_Lab2_v3
     public partial class MainWindow : Window
     {
         ViewData data { get; set; }
+        public static RoutedCommand BreakpointsC = new RoutedCommand("Break", typeof(Wpf_Lab2_v3.MainWindow));
+        public static RoutedCommand DrawC = new RoutedCommand("PointsD", typeof(Wpf_Lab2_v3.MainWindow));
         public MainWindow()
         {
+
             InitializeComponent();
+
+
 
             data = new ViewData();
             winFormsHost.Child = data.chart;
@@ -70,6 +75,36 @@ namespace Wpf_Lab2_v3
             {
                 MessageBox.Show(ex.ToString());
             }
+        }
+        private void CanBreakpoints(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (Validation.GetHasError(Breakpoints) || Validation.GetHasError(Start) || Validation.GetHasError(End)) 
+            {
+                e.CanExecute = false;
+            }
+            else
+                e.CanExecute = true;
+        }
+        private void CanDraw(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if(Validation.GetHasError(Points))
+            {
+                e.CanExecute = false;
+            }
+            else
+                e.CanExecute = true;
+        }
+        private void DoBreakpoints(object sender, ExecutedRoutedEventArgs e)
+        {
+            Breakpoints_Button_Click(sender, e);
+        }
+        private void DoDraw(object sender, ExecutedRoutedEventArgs e)
+        {
+            Draw_Button_Click(sender, e);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
         }
     }
 }

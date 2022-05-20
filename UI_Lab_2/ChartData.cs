@@ -15,7 +15,8 @@ namespace Wpf_Lab2_v3
 
         static System.Drawing.Color[] Colors =
                  new System.Drawing.Color[] { System.Drawing.Color.Red,
-                                            System.Drawing.Color.Blue};
+                                            System.Drawing.Color.Blue,
+                                            System.Drawing.Color.Green };
         public ChartData(SplinesData sData)
         {
             this.sData = sData;
@@ -25,7 +26,7 @@ namespace Wpf_Lab2_v3
             string name;
             double[] X = new double[sData.Parameters.nodes];
             double[] Y;
-            double step = (sData.MData.limits[1] - sData.MData.limits[0]) / sData.Parameters.nodes;
+            double step = (sData.MData.rlimits - sData.MData.llimits) / (sData.Parameters.nodes - 1);
 
             chart.ChartAreas.Clear();
             chart.Titles.Clear();
@@ -45,7 +46,7 @@ namespace Wpf_Lab2_v3
 
 
             for (int i = 0; i < sData.Parameters.nodes; i++)
-                X[i] = sData.MData.limits[0] + step * i;
+                X[i] = sData.MData.llimits + step * i;
 
             for (int js = 0; js < 2; js++)
             {
@@ -63,10 +64,6 @@ namespace Wpf_Lab2_v3
                 chart.Series.Add(js.ToString());
                 chart.Series[js].Points.DataBindXY(X, Y);
 
-                chart.Series[js].MarkerStyle = MarkerStyle.Cross;
-                chart.Series[js].MarkerSize = 5;
-                chart.Series[js].MarkerColor = jsColor;
-
                 chart.Series[js].ChartType = SeriesChartType.Spline;
                 chart.Series[js].Color = jsColor;
 
@@ -76,6 +73,18 @@ namespace Wpf_Lab2_v3
                 legendItem.Color = jsColor;
                 legend.CustomItems.Add(legendItem);
             }
+
+            X = sData.MData.x;
+            Y = sData.MData.y;
+            chart.Series.Add("Breakpoints");
+            chart.Series[2].Points.DataBindXY(X, Y);
+
+            chart.Series[2].MarkerStyle = MarkerStyle.Cross;
+            chart.Series[2].MarkerSize = 5;
+            chart.Series[2].MarkerColor = Colors[2];
+
+            chart.Series[2].ChartType = SeriesChartType.FastPoint;
+            chart.Series[2].Color = Colors[2];
             chart.Legends.Add(legend);
         }
     }

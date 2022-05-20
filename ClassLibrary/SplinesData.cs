@@ -44,12 +44,13 @@ namespace Wpf_Lab2_v3
             double[] all_values_spline2 = new double[Parameters.nodes * 2];
 
             int ret = 0;
-            global_func(MData.nodes, 1, Parameters.nodes, MData.limits, MData.y, Parameters.Right_Left_1, all_values_spline1, ref ret);
+            double[] limits = new double[2] { MData.llimits, MData.rlimits };
+            global_func(MData.nodes, 1, Parameters.nodes, limits, MData.y, Parameters.Right_Left_1, all_values_spline1, ref ret);
             if (ret != 0)
                 throw new Exception($"Error {ret} global_func 1");
 
             ret = 0;
-            global_func(MData.nodes, 1, Parameters.nodes, MData.limits, MData.y, Parameters.Right_Left_2, all_values_spline2, ref ret);
+            global_func(MData.nodes, 1, Parameters.nodes, limits, MData.y, Parameters.Right_Left_2, all_values_spline2, ref ret);
             if (ret!= 0)
                 throw new Exception($"Error {ret} global_func 2");
             
@@ -64,8 +65,8 @@ namespace Wpf_Lab2_v3
             deriv_eq(deriv1, all_values_spline1);
             deriv_eq(deriv2, all_values_spline2);
 
-            double step = (MData.limits[1] - MData.limits[0]) / MData.nodes;
-            double[] points = new double[] { MData.limits[0], MData.limits[0]+step, MData.limits[1]-step, MData.limits[1] };
+            double step = (MData.rlimits - MData.llimits) / MData.nodes;
+            double[] points = new double[] { MData.llimits, MData.llimits+step, MData.rlimits-step, MData.rlimits };
             string[] output = new string[] { "a", "a+h", "b-h", "b" };
             
 

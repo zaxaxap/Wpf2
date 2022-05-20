@@ -28,19 +28,33 @@ namespace Wpf_Lab2_v3
                 OnPropertyChanged("nodes");
             }
         }
-        private double[] __limits;
-        public double[] limits
+        private double __llimits;
+        public double llimits
         {
             get
             {
-                return __limits;
+                return __llimits;
             }
             set
             {
-                __limits = value;
-                OnPropertyChanged("limits");
+                __llimits = value;
+                OnPropertyChanged("llimits");
             }
         }
+        private double __rlimits;
+        public double rlimits
+        {
+            get
+            {
+                return __rlimits;
+            }
+            set
+            {
+                __rlimits = value;
+                OnPropertyChanged("llimits");
+            }
+        }
+
         public ObservableCollection<string> XYinfo { get; set; }
         public MeasuredData(int nodes = 5, double left = 0, double right = 1, SPf func = SPf.Cubic)
         {
@@ -49,7 +63,7 @@ namespace Wpf_Lab2_v3
                 throw new Exception("Nodes must be more than 1");
             }
             this.nodes = nodes;
-            limits = new double[2] { left, right };
+            llimits = 0;
             this.func = func;
             XYinfo = new ObservableCollection<string>();
 
@@ -61,7 +75,7 @@ namespace Wpf_Lab2_v3
             XYinfo.Clear();
             x = new double[nodes];
             y = new double[nodes];
-            double step = (limits[1] - limits[0]) / nodes;
+            double step = (rlimits - llimits) / (nodes - 1);
             Func<double, double> lambda = x => x;
             if (func == SPf.Cubic)
                 lambda = (x) => (x*x*x + x * x + 1);
@@ -74,7 +88,7 @@ namespace Wpf_Lab2_v3
             }
             for (int i = 0; i < nodes; i++)
             {
-                x[i] = limits[0] + i * step;
+                x[i] = llimits + i * step;
                 y[i] = lambda(x[i]);
                 XYinfo.Add($"X[{i}]={x[i]:F3}, Y[{i}]={y[i]:F3}");
             }
@@ -90,8 +104,11 @@ namespace Wpf_Lab2_v3
                     case "nodes":
                         if (nodes < 2) msg = "Number of breakpoints must be more 1!";
                         break;
-                    case "limits":
-                        if (limits[0] > limits[1]) msg = "Left limit must be equal/less right limit!";
+                    case "llimits":
+                        if (llimits >= rlimits) msg = "Left limit must be less right limit!";
+                        break;
+                    case "rlimits":
+                        if (llimits >= rlimits) msg = "Left limit must be less right limit!";
                         break;
                     default:
                         break;
